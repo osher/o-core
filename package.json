@@ -1,6 +1,6 @@
 {
   "name": "o-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "o-core - JavaScript core extensions that powers up JavaScript. Inspired by earlier versions of prototype.js - Intrusive by default, take care.",
   "main": "lib",
   "scripts": {
