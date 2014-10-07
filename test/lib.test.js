@@ -8,6 +8,7 @@ module.exports =
     , ".copy(source)" : mustHaveMethod("copy", 1)
     , ".clone(source)" : mustHaveMethod("clone", 1)
     , ".defaults(target, source, source, source...)" : mustHaveMethod("defaults")
+    , ".merge(target, source, source, source...)" : mustHaveMethod("merge")
     , ".closure(fHandler,args)" : mustHaveMethod("closure", 2)
     , ".IBase interface" : 
       { "should be a mixin" : mustBeAnObject(o.IBase)
