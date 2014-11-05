@@ -39,8 +39,36 @@ module.exports =
         }
       }
     , "~class.implements" : 
-      { "should add all methods from all method sets to the prototype" : null
-      , "when methodset is a function - should execute it as a closure first" : null
+      { "should add all methods from all method sets to the prototype" : 
+        function() {
+            var Implementor = o.class(function() {} );
+            Implementor.implements( 
+              { foo : foo 
+              , bar : "baz"
+              }
+            );
+            function foo() {}
+            Implementor.prototype.should.have.property('foo');
+            Implementor.prototype.foo.should.equal(foo);
+            Implementor.prototype.should.have.property('bar','baz');
+        }
+      , "when methodset is a function - should execute it as a closure first" : 
+        function() {
+            var Implementor = o.class(function() {} );
+            Implementor.implements( 
+              function() {
+                  var someState = 1;
+                  return {
+                    foo : function() { return someState++ }
+                  , bar : "baz"
+                  }
+              }
+            );
+            
+            Implementor.prototype.should.have.property('foo');
+            Implementor.prototype.foo.should.be.a.Function;
+            Implementor.prototype.should.have.property('bar','baz');
+        }
       }
     , "~class.overrides" : 
       { "should be asynonim for class.implements" : 
