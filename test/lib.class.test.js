@@ -12,6 +12,11 @@ module.exports =
           function() {
               found = o.class(cls)
           }
+        , "should return the provided constructor function" : 
+          function() {
+              Should.exist(found);
+              found.should.equal(cls)
+          }
         , "the provided function should be augmented with" : 
           { ".inherits(parentClass)" : mustHaveMethod("inherits", 1, cls)
           , ".implements(methodSet, methodSet, methodSet...)" : mustHaveMethod("implements", null, cls)
@@ -19,15 +24,10 @@ module.exports =
           , ".static(methodSet, methodSet, methodSet...)" : mustHaveMethod("static", null, cls)
           , ".alias(aliasSet)" : mustHaveMethod("alias", 1, cls)
           }
-        , "should return the provided constructor function" : 
-          function() {
-              Should.exist(found);
-              found.should.equal(cls)
-          }
         }
     })
-  , "API of an initiated class" :
-    { "class.inherits" : 
+  , "Using API of an initiated class" :
+    { ".inherits" : 
       { "should connect inheritence to the provided parent class" : 
         function() {
             var Person = o.class(function() {} )
@@ -38,7 +38,7 @@ module.exports =
             w.should.be.instanceOf(Worker);
         }
       }
-    , "~class.implements" : 
+    , ".implements" : 
       { "should add all methods from all method sets to the prototype" : 
         function() {
             var Implementor = o.class(function() {} );
@@ -46,13 +46,18 @@ module.exports =
               { foo : foo 
               , bar : "baz"
               }
+            , { pam : foo 
+              , bam : "ba"
+              }
             );
             function foo() {}
             Implementor.prototype.should.have.property('foo');
             Implementor.prototype.foo.should.equal(foo);
             Implementor.prototype.should.have.property('bar','baz');
+            Implementor.prototype.pam.should.equal(foo);
+            Implementor.prototype.should.have.property('bam','ba');
         }
-      , "when methodset is a function - should execute it as a closure first" : 
+      , "when method set is a function - should execute it as a closure first" : 
         function() {
             var Implementor = o.class(function() {} );
             Implementor.implements( 
@@ -70,14 +75,14 @@ module.exports =
             Implementor.prototype.should.have.property('bar','baz');
         }
       }
-    , "~class.overrides" : 
+    , ".overrides" : 
       { "should be asynonim for class.implements" : 
         function() {
             var Klass = o.class(function() {} );
             Klass.should.have.property('overrides', Klass.implements);
         }
       }
-    , "~class.alias" : 
+    , ".alias" : 
       { "should create a synonim for every key name to the method named in the value" : 
         function() {
              var Person = 
@@ -96,9 +101,49 @@ module.exports =
              Person.prototype.should.have.property("allam", Person.prototype.world) ;
         }
       }
-    , "~class.static" : 
-      { "should add all methods from all method sets to the class as static method" : null
-      , "when methodset is a function - should execute it as a closure first" : null
+    , ".static" : 
+      { "should add all methods from all method sets to the class as static method" : 
+        function() {
+            var Implementor = 
+                o.class(function() {} )
+                 .implements( 
+                  { hello : function() {}
+                  , world : function() {}
+                  }
+                ).static(
+                  { foo : foo 
+                  , bar : "baz"
+                  }
+                , { pam : foo 
+                  , bam : "ba"
+                  }
+                )
+              ;
+            
+            Implementor.should.have.property("foo", foo);
+            Implementor.should.have.property("bar", "baz");
+            Implementor.should.have.property("pam", foo);
+            Implementor.should.have.property("bam", "ba");
+            
+            function foo() {}
+        }
+      , "when methodset is a function - should execute it as a closure first" : 
+        function() {
+            var Implementor = o.class(function() {} );
+            Implementor.static( 
+              function() {
+                  var someState = 1;
+                  return {
+                    foo : function() { return someState++ }
+                  , bar : "baz"
+                  }
+              }
+            );
+            
+            Implementor.should.have.property('foo');
+            Implementor.foo.should.be.a.Function;
+            Implementor.should.have.property('bar','baz');
+        }
       }
     }
   }
