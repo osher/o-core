@@ -1,6 +1,6 @@
 {
   "name": "o-core",
-  "version": "0.0.5",
+  "version": "0.2.0",
   "description": "o-core - JavaScript core extensions that powers up JavaScript. Inspired by earlier versions of prototype.js - Intrusive by default, have fun and take care.",
   "main": "lib",
   "scripts": {
@@ -18,5 +18,14 @@
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "buildInfo": {
+    "date": "2016-03-24T17:56:29.240Z",
+    "commit": {
+      "hash": "eaa51018b2d1ea55933617a21d839fce0377b36d",
+      "author": "osher",
+      "date": "2016-03-24T17:55:04.000Z",
+      "comment": "add tests for o.class().static"
+    }
+  }
 }
